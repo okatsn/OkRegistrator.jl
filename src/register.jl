@@ -15,10 +15,47 @@ function tryregisterat(pkgpath, regpath)
     return iserrored
 end
 
-regrepoexpr(regrepo) = Regex("^((?!$regrepo).)*\$")
+"""
+`exprnotreg(regrepo)` returns expression not matching `regrepo`.
 
-function okciregister(okregpath; regrepo = "OkRegistry")
+# Example
+```jldoctest foobarrr
+expr = OkRegistrator.exprnotreg("OkRegistry")
+occursin(expr, ".julia/dev/OkRegistry")
+
+# output
+
+false
+```
+
+```jldoctest foobarrr
+occursin(expr, ".julia/dev/NotOkRegistry")
+
+# output
+
+false
+```
+
+```jldoctest foobarrr
+occursin(expr, ".julia/dev/NotOkAtRegistryAll")
+
+# output
+
+true
+```
+"""
+exprnotreg(regrepo) = Regex("^((?!$regrepo).)*\$")
+
+function okciregister(okregpath)
+    regrepo = basename(okregpath)
     dirmain(args...) = joinpath(dirname(okregpath), args...) # The parent of pwd (which should be .../OkRegistry/)
-    dir_myregistry = dirmain(regrepo)
-    localpkgpaths = folderlist(regrepoexpr(regrepo), dirmain()) # all folders under dirmain that is not "OkRegistry".
+    localpkgpaths = folderlist(exprnotreg(regrepo), dirmain()) # all folders under dirmain that is not "OkRegistry".
+    iserrored = false
+    for pkgpath in localpkgpaths
+        iserrored = tryregisterat(pkgpath, okregpath)
+    end
+
+    if iserrored
+        error("At least one error occurred in the session.")
+    end
 end

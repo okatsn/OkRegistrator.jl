@@ -1,7 +1,7 @@
 
 @testset "regexprtest.jl" begin
     regrepo = "OkRegistry"
-    expr1 = OkRegistrator.regrepoexpr(regrepo)
+    expr1 = OkRegistrator.exprnotreg(regrepo)
     expr0 = r"^((?!OkRegistry).)*$"
     r"^((?!OkRegistry).)*$"
 
