@@ -10,6 +10,6 @@ include("folderlist.jl")
 using LocalRegistry
 include("register.jl")
 export tryregisterat
-
+export okciregister
 
 end

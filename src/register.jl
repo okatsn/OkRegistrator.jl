@@ -66,3 +66,5 @@ function okciregister(okregpath)
         error("At least one error occurred in the session.")
     end
 end
+
+okciregister() = okciregister(pwd())
