@@ -49,6 +49,9 @@ function baseexactexpr(regrepo)
     Regex("^$bname\$")
 end
 
+"""
+Given the directory of your local registry `okregpath`, `okciregister(okregpath)` attempts to register all pacakges (folders) under `dirname(okregpath)`.
+"""
 function okciregister(okregpath)
     regrepo = basename(okregpath)
     dirmain(args...) = joinpath(dirname(okregpath), args...) # The parent of pwd (which should be .../OkRegistry/)
