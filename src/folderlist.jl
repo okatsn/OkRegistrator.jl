@@ -20,15 +20,20 @@ function folderlist(;kwargs...)
     folderlist(pwd();kwargs...)
 end
 
-"""
-`folderlist(expr::Regex, dir; join=true)` returns a vector of paths who match `expr`.
-"""
-function folderlist(expr::Regex, dir; join=true)
+function folderlist_ind(expr::Regex, dir; join=true)
     allfolders = folderlist(dir; join = join)
     if join
         desired_ind = occursin.(expr, basename.(allfolders))
     else
         desired_ind = occursin.(expr, allfolders)
     end
+    return (allfolders, desired_ind)
+end
+
+"""
+`folderlist(expr::Regex, dir; join=true)` returns a vector of paths who match `expr`.
+"""
+function folderlist(expr::Regex, dir; kwargs...)
+    (allfolders, desired_ind) = folderlist_ind(expr, dir; kwargs...)
     return allfolders[desired_ind]
 end

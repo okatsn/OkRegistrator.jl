@@ -16,40 +16,44 @@ function tryregisterat(pkgpath, regpath)
 end
 
 """
-`exprnotreg(regrepo)` returns expression not matching `regrepo`.
+`baseexactexpr(regrepo)` returns expression matching exactly the `basename` of `regrepo`.
 
 # Example
 ```jldoctest foobarrr
-expr = OkRegistrator.exprnotreg("OkRegistry")
-occursin(expr, ".julia/dev/OkRegistry")
-
-# output
-
-false
-```
-
-```jldoctest foobarrr
-occursin(expr, ".julia/dev/NotOkRegistry")
-
-# output
-
-false
-```
-
-```jldoctest foobarrr
-occursin(expr, ".julia/dev/NotOkAtRegistryAll")
+expr = OkRegistrator.baseexactexpr(".julia/dev/OkRegistry")
+occursin(expr, "OkRegistry")
 
 # output
 
 true
 ```
+
+```jldoctest foobarrr
+occursin(expr, "NotOkRegistry")
+
+# output
+
+false
+```
+
+```jldoctest foobarrr
+occursin(expr, "NotOkAtRegistryAll")
+
+# output
+
+false
+```
 """
-exprnotreg(regrepo) = Regex("^((?!$regrepo).)*\$")
+function baseexactexpr(regrepo)
+    bname = basename(regrepo)
+    Regex("^$bname\$")
+end
 
 function okciregister(okregpath)
     regrepo = basename(okregpath)
     dirmain(args...) = joinpath(dirname(okregpath), args...) # The parent of pwd (which should be .../OkRegistry/)
-    localpkgpaths = folderlist(exprnotreg(regrepo), dirmain()) # all folders under dirmain that is not "OkRegistry".
+    allfolder, id2reg = folderlist_ind(baseexactexpr(regrepo), dirmain()) # all folders under dirmain that is not "OkRegistry".
+    localpkgpaths = allfolder[.!id2reg]
     iserrored = false
     for pkgpath in localpkgpaths
         iserrored = tryregisterat(pkgpath, okregpath)
