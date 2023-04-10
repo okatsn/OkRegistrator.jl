@@ -1,3 +1,6 @@
+"""
+`tryregisterat(pkgpath, regpath)` try to register package at `pkgpath` to local registry at `regpath`. If failed, it raises warnings and returns `iserrored = true`.
+"""
 function tryregisterat(pkgpath, regpath)
     iserrored = false
     try
@@ -51,6 +54,8 @@ end
 
 """
 Given the directory of your local registry `okregpath`, `okciregister(okregpath)` attempts to register all pacakges (folders) under `dirname(okregpath)`.
+
+This is used in the CI. See also the template `register.yml` in [OkPkgTemplates.jl](https://github.com/okatsn/OkPkgTemplates.jl).
 """
 function okciregister(okregpath)
     regrepo = basename(okregpath)

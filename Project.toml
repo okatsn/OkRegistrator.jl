@@ -1,7 +1,7 @@
 name = "OkRegistrator"
 uuid = "5eb89c91-2e2f-4632-ba7c-3ec58ab78207"
 authors = ["okatsn <okatsn@gmail.com> and contributors"]
-version = "0.0.2"
+version = "0.1.0"
 
 [deps]
 LocalRegistry = "89398ba2-070a-4b16-a995-9893c55d93cf"
