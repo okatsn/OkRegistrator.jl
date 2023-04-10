@@ -1,7 +1,7 @@
 verexpr = r"(\d+\.?)+"
 
 """
-Given the package directory `pkgpath`, `isprerelease(pkgpath)` returns `true` if there is nothing left after matching $verexpr.
+Given the package directory `pkgpath`, `isprerelease(pkgpath)` returns `true` if the `VersionNumber` in `Project.toml` is a prerelease.
 Use this to check whether to registor a version or not.
 """
 function isprerelease(pkgpath)

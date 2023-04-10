@@ -1,19 +1,23 @@
 """
 `tryregisterat(pkgpath, regpath)` try to register package at `pkgpath` to local registry at `regpath`. If failed, it raises warnings and returns `iserrored = true`.
+
+`tryregisterat` will do registeration only when `isprerelease(pkgpath)` is `false`.
 """
 function tryregisterat(pkgpath, regpath)
     iserrored = false
-    try
-        register(
-            pkgpath,
-            registry=regpath,
-            push=true # optional
-        )
-    catch e
-        iserrored = true
-        pkgname, pkgdir = map(f-> f(pkgpath), (basename, dirname))
-        @warn "($(pkgname)) Error occurred registrating $pkgpath to $regpath."
-        @warn "Skipped (Error message: $e)"
+    if !isprerelease(pkgpath)
+        try
+            register(
+                pkgpath,
+                registry=regpath,
+                push=true # optional
+            )
+        catch e
+            iserrored = true
+            pkgname, pkgdir = map(f-> f(pkgpath), (basename, dirname))
+            @warn "($(pkgname)) Error occurred registrating $pkgpath to $regpath."
+            @warn "Skipped (Error message: $e)"
+        end
     end
     return iserrored
 end
